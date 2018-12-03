@@ -25,11 +25,11 @@
  ##git工作原理
  #####工作区 git add--->暂存区 git commit--->本地仓库
  #####可以将多个文件多次提交到暂存区，在暂存区通过git commit（清空暂存区）一次性提交到本地仓库,然后再提交到远程仓库GitHub
- ######git init:先在本地初始化一个仓库
- ######git add README.md：将我的工作区里的文件提交到暂存区
- ######git commit -m "本次提交的一个描述" :将暂存区的内容提交到本地仓库
- ######git remote add origin git@github.com:lll865457981/learnshopping.git:将本地仓库和远程仓库做一个关联
- ######git push -u origin master：将本地仓库里的内容提交到远程仓库
+ #####git init:先在本地初始化一个仓库
+ #####git add README.md：将我的工作区里的文件提交到暂存区
+ #####git commit -m "本次提交的一个描述" :将暂存区的内容提交到本地仓库
+ #####git remote add origin git@github.com:lll865457981/learnshopping.git:将本地仓库和远程仓库做一个关联
+ #####git push -u origin master：将本地仓库里的内容提交到远程仓库
  
  ##git常用命令
  #####git init：创建本地仓库；在工作区
