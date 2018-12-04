@@ -54,11 +54,11 @@
  ##### git push origin master:以后提交到远程仓库
  ###### 出现上传不了的时候，是因为远程仓库的东西没有拉下来，可在提交命令的后面加上“-f”,进行强制提交
  ####远程分支合并dev
- #####git checkout dev   切换到要合并的分支
- #####git pull origin dev  拉取分支的数据
- #####git checkout master  切换到master分支
- #####git merge dev        将dev分支合并到master分支
- #####git push origin master   再进行文件的远程提交
+ ##### git checkout dev   切换到要合并的分支
+ ##### git pull origin dev  拉取分支的数据
+ ##### git checkout master  切换到master分支
+ ##### git merge dev        将dev分支合并到master分支
+ ##### git push origin master   再进行文件的远程提交
  ## 企业项目开发模式
  ##### 项目采用：
    ##### 分支开发，主干发布
