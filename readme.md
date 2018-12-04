@@ -283,4 +283,29 @@
  `update_time`       datetime      not null   comment '最后一次更新时间',
   PRIMARY KEY(`id`)
  )ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+ ```
  
+ ### 项目架构--四层架构（上层依赖下层）
+ ##### 视图层
+ ##### 表单进行数据的提交，提交到servlet或者是springMVC的controller层
+ #### 控制层controller
+ ##### 接收视图层传的数据，同时负责调用业务逻辑层，将业务逻辑层返回的值通过控制层返回到视图层
+ #### 业务逻辑层service
+ ##### 业务逻辑层是负责具体的业务逻辑的，业务逻辑层调用DAO层进行数据的处理
+ ###### 接口和实现类
+ #### DAO层
+ ##### 主要是和数据层进行交互的，对数据库的增删改查
+ 
+ #### common放常量和枚举之类的
+ #### 工具包，读写之类的，时间等，封装的一些方法
+ 
+ ### Mybatis-generator插件
+ ##### 它可以一键生成dao接口，实体类，映射文件，sql文件
+ 
+ ##### properties文件中的这些值，不加前缀也可以，但是username默认加载操作系统的用户名，防止插件默认记载系统名，要加前缀
+ 
+ 
+ ### 搭建ssm框架
+ ##### 引入依赖包
+ 
+ ##### springMVC框架其实就是管理controller，所以扫描注解的时候只扫描controller包中的就可以了

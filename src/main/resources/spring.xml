@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+     <!--开启注解 用框架的IOC基于注解 spring容器会扫描基础包com.neuedu，包括包下的子包里的类，子包里的类还会被spring容器所管理-->
+     <context:component-scan base-package="com.neuedu">
+     </context:component-scan>
+
+
+
+    <!--开启基于注解的实物配置-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--加载数据库的配置文件-->
+    <context:property-placeholder
+            location="classpath:db.properties"></context:property-placeholder>
+    <!-- c3p0带有连接池的数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <!--mybatis的bean-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--configLocation mybatis的全局配置文件，在类路径加载，就是在java，resources这两个路径里去找-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+
+        <!--mybatis sql的映射文件-->
+        <property name="mapperLocations" value="classpath:com/neuedu/mapper/*Mapper.xml" ></property>
+        <!--数据源-->
+       <property name="dataSource" ref="dataSource"></property>
+        <!-- 分页插件 -->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+                            dialect=mysql
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--配置了mybatis的bean-sqlSession-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" index="0"></constructor-arg>
+    </bean>
+    <!-- 配置mybatis Dao接口的代理实现类 -->
+    <!--通过动态代理的方式根据dao接口自动实现一个类-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.neuedu.dao"/>
+        <property name="sqlSessionTemplateBeanName" value="sqlSession"/>
+    </bean>
+
+
+
+
+
+</beans>
