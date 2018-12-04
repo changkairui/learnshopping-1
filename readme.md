@@ -1,7 +1,7 @@
  # Git笔记
  ## git 配置
  #### 1.配置用户名(提交时会引用)
- ###### it config --global user.name "用户名"
+ ###### git config --global user.name "用户名"
  ##### 2.配置邮箱
  ###### git config --global user.email "邮箱"
  ##### 3.编码配置
