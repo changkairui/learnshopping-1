@@ -307,9 +307,9 @@
  ##### 配置pom.xml，导入各种依赖，引入MySQL包和mybatis-generator依赖，引入org.mybatis.generator
  ##### 创建db.properties文件，输入名字密码网址驱动
         jdbc.username=root
-        jdbc.password=345513
+        jdbc.password=ljll617.
         jdbc.driver=com.mysql.jdbc.Driver
-        jdbc.url=jdbc:mysql://localhost:3306/ilearnshopping 
+        jdbc.url=jdbc:mysql://localhost:3306/illearnshopping 
  ##### 在generatorConfig.xml 中配置db.properties
  ##### 配置MySQL依赖包，输入jar包具体路径
  ##### 配置当前文件下的各种数据。配置数据库用${}
