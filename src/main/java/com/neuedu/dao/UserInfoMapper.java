@@ -47,10 +47,20 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     /**
-     * 校验是否存在
+     * 校验用户名是否存在
      */
     int checkUsername(String username);
+    /**
+     * 校验用户名是否存在
+     */
+    int checkEmail(String email);
 
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @return
+     */
    UserInfo selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
 
 }

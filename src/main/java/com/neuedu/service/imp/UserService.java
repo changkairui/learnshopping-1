@@ -1,6 +1,7 @@
 package com.neuedu.service.imp;
 
 
+import com.neuedu.common.Const;
 import com.neuedu.common.ServerResponse;
 import com.neuedu.dao.UserInfoMapper;
 import com.neuedu.pojo.UserInfo;
@@ -21,11 +22,29 @@ public class UserService implements IUserService {
     }*/
     public ServerResponse register(UserInfo userInfo) {
 
+        //step1:参数非空校验
+        if (userInfo==null){
+            return ServerResponse.createServerResponseByErrow("参数必须");
+        }
+        //step2:校验用户名
+        int result_username = userInfoMapper.checkUsername(userInfo.getUsername());
+        if (result_username>0){//用户名已经存在
+            return ServerResponse.createServerResponseByErrow("用户名已经存在");
+        }
+        //step3:校验邮箱
+        int result_email = userInfoMapper.checkEmail(userInfo.getEmail());
+        if (result_email>0){//邮箱已经存在
+            return ServerResponse.createServerResponseByErrow("邮箱已经存在");
+        }
+        //step4:注册
+        userInfo.setRole(Const.RoleEnum.ROLE_CUSTPMER.getCode());
         int count = userInfoMapper.insert(userInfo);
         if (count>0){
-            return ServerResponse.createServerResponseBySucess();
+            return ServerResponse.createServerResponseBySucess("注册成功");
         }
-        return ServerResponse.createServerResponseByErrow();
+        //step5:返回结果
+        return ServerResponse.createServerResponseByErrow("注册失败");
+
     }
 
     @Override
