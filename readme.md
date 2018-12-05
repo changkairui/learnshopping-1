@@ -1,5 +1,5 @@
  
- ##============== 20181203 ===============
+ ## ============== 20181203 ===============
  # Git笔记
  ## git 配置
  #### 1.配置用户名(提交时会引用)
@@ -305,20 +305,20 @@
  ##### properties文件中的这些值，不加前缀也可以，但是username默认加载操作系统的用户名，防止插件默认记载系统名，要加前缀
  #### 步骤
  ##### 配置pom.xml，导入各种依赖，引入MySQL包和mybatis-generator依赖，引入org.mybatis.generator
- #####创建db.properties文件，输入名字密码网址驱动
+ ##### 创建db.properties文件，输入名字密码网址驱动
         jdbc.username=root
         jdbc.password=345513
         jdbc.driver=com.mysql.jdbc.Driver
         jdbc.url=jdbc:mysql://localhost:3306/ilearnshopping 
- #####在generatorConfig.xml 中配置db.properties
- #####配置MySQL依赖包，输入jar包具体路径
- #####配置当前文件下的各种数据。配置数据库用${}
- #####配置实体类，SQL文件，Dao接口
+ ##### 在generatorConfig.xml 中配置db.properties
+ ##### 配置MySQL依赖包，输入jar包具体路径
+ ##### 配置当前文件下的各种数据。配置数据库用${}
+ ##### 配置实体类，SQL文件，Dao接口
      com.neuedu.pojo         src/main/java
      com.neuedu.mapper       src/main/resources
      com.neuedu.dao          src/main/java
- #####配数据表
- #####最后 右边栏的Maven Projects 里 pluging 里 mybatis-generator 里 mybatis-generator:generate 双击生成实体类、dao、mapper映射xml文件
+ ##### 配数据表
+ ##### 最后 右边栏的Maven Projects 里 pluging 里 mybatis-generator 里 mybatis-generator:generate 双击生成实体类、dao、mapper映射xml文件
  
  ### 搭建ssm框架
  ##### springMVC框架其实就是管理controller，所以扫描注解的时候只扫描controller包中的就可以了
