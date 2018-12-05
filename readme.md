@@ -238,7 +238,7 @@
  create table order_item(
   `id`           int(11)    not null  auto_increment comment '订单明细id,主键',
   `order_no`     bigint(20) not null  comment '订单编号',
-  `user_id`      int(11)  not null  comment '用户id',
+  `user_id`      int(11)  not null  comment '用户id',(冗余字段：用的频率很高，但是通过订单编号也能查到，但是需要用它做查询，又必须存在，增加查询速率)
   `product_id`   int(11)  not null comment '商品id',
   `product_name` varchar(100)  not null comment '商品名称',
   `product_image`  varchar(100)  comment '商品主图', 
@@ -344,3 +344,95 @@
  ##### @RestController 注解，往前端返回的数据是json格式
  ##### @RequestMapping （value="/login.do"） 映射的网址，也就可以加在类上，多层级访问
  ##### 配置tomcat 启动输入网址http://localhost:8080/login.do ,出现json数据 完成测试
+ 
+ 
+ ## ===============20181205===============
+ ##### 集成druid
+    将c3p0的数据库连接池换成druid的数据库连接池
+    将之前spring.xml文件中的数据源换成druid
+ ##### 测试四层架构
+     控制层依赖service层，service层依赖dao层
+     1.创建service类接口，接口特性：方法的定义
+     2.创建service实体类
+        userInfoMapper本身是没有值，直接用报空指针异常
+        bean交给springIOC里面了，从容器获取bean，用@Autowired，他是通过类型从容器里找，前提是实现类的实体类bean也得交给容器，service层交给容器管理，用@Service（业务逻辑层的bean）
+        mybatis逆向工程生成了dao接口
+        用service调用dao层
+     3.controller调用service层，注入service接口，调用接口的方法
+        1> @RequestParam(value = "username",required = true,defaultValue = "zhang"
+        (怎么从前端获取参数，加@RequstParam(value = "username"),从前台传过来的参数username取到值，赋值给后台的username，获取到值后就可以给对象赋值了)
+        (@RequestParam(value = )里面的value值要与页面的key值保持一致，与后面形参的值不一样也可以，但如果后面形参的值，与value值相同则可以省略@RequestParam,;)
+        (required = true,表示这个值是必须要传递的，参数可传可不传的话就是false)
+        (defaultValue = "zhang" 默认值，如果没有赋这个值，直接用默认值)
+           public int login(String username, String password, String email, String phone, String question, String answer){
+                   UserInfo userInfo = new UserInfo();
+                   userInfo.setUsername(username);
+                   userInfo.setPassword(password);
+                   userInfo.setEmail(email);
+                   userInfo.setPhone(phone);
+                   userInfo.setQuestion(question);
+                   userInfo.setAnswer(answer);
+                   userInfo.setRole(1);
+                   userInfo.setCreateTime(new Date());
+                   userInfo.setUpdateTime(new Date());
+           
+                   int count = userService.register(userInfo);
+                   return count;
+               }
+        2>用springMVC对象绑定,直接用把参数传给对象，直接把对象插入到方法里面，前台传的参数多的话，用对象传比较，例，用户注册，添加地址，登录等
+           public int login(UserInfo userInfo){
+            int count = userService.register(userInfo);
+                   return count;
+               }
+
+ ### 封装返回前端的高复用对象
+       服务端响应前端的高复用对象
+       json返回类型{（int）status,data,msg}
+       成功返回{status,data} 失败返回{status,msg}
+       data的返回类型可以是字符串，数组，对象，数字，所以他的返回类型不确定，就用泛型
+       
+       @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+       在转json字符串的时候把空字段过滤掉
+       当对这个对象ServerResponse进行转成一个字符的时候，那些非空字段是不会进行转化的
+       
+       @JsonIgnore
+        ServerResponse转json的时候把success这个字段忽略掉
+        
+  #### 登录
+       step1：参数的非空校验
+         <dependency>
+             <groupId>commons-lang</groupId>
+             <artifactId>commons-lang</artifactId>
+             <version>2.6</version>
+           </dependency>
+           这个依赖提供了一些常用的校验方法
+           StringUtils.isblank();
+           public static boolean isBlank(String str) {
+                   int strLen;
+                   if (str != null && (strLen = str.length()) != 0) {
+                       for(int i = 0; i < strLen; ++i) {
+                           if (!Character.isWhitespace(str.charAt(i))) {
+                               return false;
+                           }
+                       }
+           
+                       return true;
+                   } else {
+                       return true;
+                   }
+               }
+               StringUtils.isEmpty();
+               public static boolean isEmpty(String str) {
+                       return str == null || str.length() == 0;
+                   }
+                   当判断如果是一个“ ”空的字符串带空格的时候，StringUtils.isEmpty();这个方法不能判断
+       step2：检查username是否存在
+       
+       step3：根据用户名和密码查询
+            多个参数的时候参数类型parameterType为map
+       step4：处理结果并返回  
+       
+           
+           
+    
+    
