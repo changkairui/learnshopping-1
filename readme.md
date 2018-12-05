@@ -303,9 +303,44 @@
  ##### 它可以一键生成dao接口，实体类，映射文件，sql文件
  
  ##### properties文件中的这些值，不加前缀也可以，但是username默认加载操作系统的用户名，防止插件默认记载系统名，要加前缀
- 
+ #### 步骤
+ ##### 配置pom.xml，导入各种依赖，引入MySQL包和mybatis-generator依赖，引入org.mybatis.generator
+ #####创建db.properties文件，输入名字密码网址驱动
+        jdbc.username=root
+        jdbc.password=345513
+        jdbc.driver=com.mysql.jdbc.Driver
+        jdbc.url=jdbc:mysql://localhost:3306/ilearnshopping 
+ #####在generatorConfig.xml 中配置db.properties
+ #####配置MySQL依赖包，输入jar包具体路径
+ #####配置当前文件下的各种数据。配置数据库用${}
+ #####配置实体类，SQL文件，Dao接口
+     com.neuedu.pojo         src/main/java
+     com.neuedu.mapper       src/main/resources
+     com.neuedu.dao          src/main/java
+ #####配数据表
+ #####最后 右边栏的Maven Projects 里 pluging 里 mybatis-generator 里 mybatis-generator:generate 双击生成实体类、dao、mapper映射xml文件
  
  ### 搭建ssm框架
- ##### 引入依赖包
- 
  ##### springMVC框架其实就是管理controller，所以扫描注解的时候只扫描controller包中的就可以了
+ 
+ ##### 导入依赖
+ ##### 统一版本号 <spring.version>4.2.0.RELEASE</spring.version>
+ ##### 导入spring.xml springmvc.xml mybatis-config.xml文件
+ #### spring.xml
+ ##### 开启注解扫包。核对更改数据源的名字
+    configLocation 全局配置文件 classpath 类路径
+    mapperLocations 映射文件 用/分割地址 *mapper.xml 任意mapper.xml文件
+ ##### 配置mybatis Dao接口的代理实现类，动态生成代理实现类，很重要
+ ##### mybatis-config.xml不用修改
+ ##### springmvc.xml
+ ###### 开启注解，扫描包com.neuedu.controller ，也可以com.neuedu
+ ##### 配置视图解析器、文件上传、拦截器（一期项目不用）
+ ##### web.xml更换老师的
+ ##### 加载spring配置文件 contextConfigLocation
+ ##### 加载监听器
+ ##### 加载DispacherServlet
+ ##### /为缺省路径 访问 /login.do 有servlet处理login.do就交给对应的servlet处理。没有的话就交给/处理，就是dispacherservlet处理
+ ##### 创建测试类 Testcontroller
+ ##### @RestController 注解，往前端返回的数据是json格式
+ ##### @RequestMapping （value="/login.do"） 映射的网址，也就可以加在类上，多层级访问
+ ##### 配置tomcat 启动输入网址http://localhost:8080/login.do ,出现json数据 完成测试
