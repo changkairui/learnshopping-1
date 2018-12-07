@@ -67,8 +67,12 @@ public interface UserInfoMapper {
      */
     String selectQuestionByUsername(String username);
     /**
-     * 根据密保问题，用户名，答案进行查找
+     * 校验答案
      */
     int selectByUsernameAndQuestionAndAnswer(@Param("username") String username,@Param("question") String question,@Param("answer")String answer);
+    /**
+     * 根据用户名修改密码
+     */
+    int updatePsswordByUsername(@Param("username")String username,@Param("password") String passwordNew);
 
 }

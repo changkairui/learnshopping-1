@@ -48,21 +48,21 @@ public class UserController {
         return iUserService.register(userInfo);
     }
     /**
-     * 忘记密码
+     * 根据username查找密保问题
      * @param username
      * @return
      */
-    /*@RequestMapping(value = "forget_reset_password.do")
-    public ServerResponse forget_reset_password(String username){
-        return iUserService.forget_reset_password(username);
+    @RequestMapping(value = "forget_get_question.do")
+    public ServerResponse forget_get_question(String username){
+        return iUserService.forget_get_question(username);
     }
-    *//**
+    /**
      * 提交问题答案
-     *//*
-    @RequestMapping(value = "forget_reset_password.do")
+     */
+    @RequestMapping(value = "forget_check_answer.do")
     public ServerResponse forget_check_answer(String username,String question,String answer){
         return iUserService.forget_check_answer(username,question,answer);
-    }*/
+    }
     /**
      * 校验用户名或邮箱接口
      * @param str
@@ -72,6 +72,13 @@ public class UserController {
     @RequestMapping(value = "check_valid.do")
     public ServerResponse check_valid(String str,String type){
        return iUserService.check_valid(str, type);
+    }
+    /**
+     * 修改密码
+     */
+    @RequestMapping(value = "forget_reset_password.do")
+    public ServerResponse forget_reset_password(String username,String passwordNew,String forgetToken){
+        return iUserService.forget_reset_password(username,passwordNew,forgetToken);
     }
     /**
      * 获取当前登陆用户的详细信息
@@ -106,6 +113,28 @@ public class UserController {
             responseUserInfo.setUpdateTime(userInfo.getUpdateTime());
             return ServerResponse.createServerResponseBySucess(null,responseUserInfo);
 
+
+        }
+        return ServerResponse.createServerResponseByErrow(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());
+    }
+    /**
+     * 退出登录
+     */
+    @RequestMapping(value = "logout.do")
+    public ServerResponse logout(HttpSession session){
+        session.removeAttribute(Const.CURRENTUSER);
+        return ServerResponse.createServerResponseBySucess();
+    }
+    /**
+     * 登录状态重置密码
+     */
+    @RequestMapping(value = "reset_password.do")
+    public ServerResponse reset_password(HttpSession session, String passwordOld,String passwordNew){
+
+        Object o = session.getAttribute(Const.CURRENTUSER);
+        if (o!=null && o instanceof UserInfo){
+            UserInfo userInfo = (UserInfo)o;
+            return iUserService.reset_password(userInfo,passwordOld,passwordNew);
 
         }
         return ServerResponse.createServerResponseByErrow(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());

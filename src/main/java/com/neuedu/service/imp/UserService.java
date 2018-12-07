@@ -8,10 +8,12 @@ import com.neuedu.dao.UserInfoMapper;
 import com.neuedu.pojo.UserInfo;
 import com.neuedu.service.IUserService;
 import com.neuedu.utils.MD5Utils;
+import com.neuedu.utils.TokenCache;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Service
@@ -111,45 +113,83 @@ public class UserService implements IUserService {
         if(StringUtils.isBlank(username)||StringUtils.isBlank(question)|| StringUtils.isBlank(answer)){
             return ServerResponse.createServerResponseByErrow("参数不能为空");
         }
-        // step2:根据username,question,answer查询
+        // step2:校验答案：根据username,question,answer查询，看看有没有这条记录
         int result= userInfoMapper.selectByUsernameAndQuestionAndAnswer(username, question, answer);
         if(result==0){
-            return ServerResponse.createServerResponseByErrow("答案错误");
+            return ServerResponse.createServerResponseByErrow("答案有误");
         }
+        //返回用户的唯一标识 --> username
         //step3:服务端生成一个token保存并将token返回给客户端
-        String forgetToken=UUID.randomUUID().toString();
+        String user_Token=UUID.randomUUID().toString();
+        //UUID每次生成的字符串是唯一的，不会重复的
         //guava cache
-        return null;
+        TokenCache.put(username,user_Token);
+        //缓存里用key或取，key要保证他的唯一性，key就是用户，key直接用value就可以了
+        //这样就把token放到服务端的缓存里面了，同时要将token返回到客户端
+        //step4:返回结果
+        return ServerResponse.createServerResponseBySucess(null,user_Token);
+
+
     }
 
     /**
-     * 忘记密码
+     * 修改密码
+     * @param username
+     * @param passwordNew
+     * @return
+     */
+
+    @Override
+    public ServerResponse forget_reset_password(String username, String passwordNew,String forgetToken) {
+        //step1：参数的非空校验
+        if(StringUtils.isBlank(username)||StringUtils.isBlank(passwordNew)||StringUtils.isBlank(forgetToken)){
+            return ServerResponse.createServerResponseByErrow("参数不能为空");
+        }
+        //step3:校验token
+        String token = TokenCache.get(username);
+        if (StringUtils.isBlank(token)){
+            return ServerResponse.createServerResponseByErrow("token不存在或者是过期了");
+        }
+        if (!token.equals(forgetToken)){
+            return ServerResponse.createServerResponseByErrow("token不一致");
+        }
+        //step2：更新密码
+       int upadate_password = userInfoMapper.updatePsswordByUsername(username, MD5Utils.getMD5Code(passwordNew));
+        if (upadate_password<=0){
+            return ServerResponse.createServerResponseByErrow("修改密码错误");
+        }
+        //step4：返回结果
+        return ServerResponse.createServerResponseBySucess();
+    }
+
+    /**
+     * 根据用户名获取密保问题
      * @param username
      * @return
      */
 
     @Override
-    public ServerResponse forget_reset_password(String username) {
+    public ServerResponse forget_get_question(String username) {
         //step1:参数的非空校验
         if (StringUtils.isBlank(username)){
             return ServerResponse.createServerResponseByErrow(ResponseCode.PARAM_EMPTY.getStatus(),ResponseCode.PARAM_EMPTY.getMsg());
         }
 
 
-        //step2:校验username
+        //step2:校验username是否存在
         ServerResponse serverResponse = check_valid(username,Const.USERNAME);
         if (serverResponse.isSuccess()){
-            return ServerResponse.createServerResponseByErrow(ResponseCode.NOT_EXISTS_USERNAME.getStatus(),ResponseCode.NOT_EXISTS_USERNAME.getMsg());
+            return ServerResponse.createServerResponseByErrow(ResponseCode.EXISTS_USERNAME.getStatus(),ResponseCode.EXISTS_USERNAME.getMsg());
         }
         //step3:查找密保问题
 
         String question = userInfoMapper.selectQuestionByUsername(username);
         if (StringUtils.isBlank(username)){
-            return ServerResponse.createServerResponseByErrow("密保问题为空");
+            return ServerResponse.createServerResponseByErrow("该用户未设置找回密码问题");
         }
 
 
-        return ServerResponse.createServerResponseBySucess(question);
+        return ServerResponse.createServerResponseBySucess(null,question);
     }
 
     /**
@@ -190,6 +230,35 @@ public class UserService implements IUserService {
         //登录成功后userInfo保存在session当中
 
 
+
+    }
+
+    /**
+     * 登录状态下修改密码
+     * @param userInfo
+     * @param passwordOld
+     * @param passwordNew
+     * @return
+     */
+    @Override
+    public ServerResponse reset_password(UserInfo userInfo, String passwordOld, String passwordNew) {
+        //step1：参数的非空校验
+        if (StringUtils.isBlank(passwordNew)||StringUtils.isBlank(passwordOld)){
+            return ServerResponse.createServerResponseByErrow("参数不能为空");
+
+        }
+        //step2：校验旧密码是否正确,根据用户名和旧密码查询这个用户
+        UserInfo userInfo1 = userInfoMapper.selectUserByUsernameAndPassword(userInfo.getUsername(),MD5Utils.getMD5Code(passwordOld));
+        if (userInfo1==null){
+            return ServerResponse.createServerResponseByErrow("旧密码错误");
+        }
+        //step3：修改密码
+        int count = userInfoMapper.updatePsswordByUsername(userInfo.getUsername(),MD5Utils.getMD5Code(passwordNew));
+        //step4：返回结果
+        if (count<=0){
+            return ServerResponse.createServerResponseByErrow("密码修改失败");
+        }
+        return ServerResponse.createServerResponseBySucess("密码修改成功");
 
     }
 }
