@@ -86,4 +86,10 @@
     update_time
     from usertable where username=#{username} and password=#{password}
   </select>
+  <select id="selectQuestionByUsername" parameterType="String" >
+    select question from usertable where username=#{username}
+  </select>
+  <select id="selectByUsernameAndQuestionAndAnswer" parameterType="map" resultType="int">
+    select count(1) from usertable where  username=#{username} and question=#{question} and answer=#{answer}
+  </select>
 </mapper>

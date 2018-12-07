@@ -62,5 +62,13 @@ public interface UserInfoMapper {
      * @return
      */
    UserInfo selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
+    /**
+     * 根据用户名查找密保问题
+     */
+    String selectQuestionByUsername(String username);
+    /**
+     * 根据密保问题，用户名，答案进行查找
+     */
+    int selectByUsernameAndQuestionAndAnswer(@Param("username") String username,@Param("question") String question,@Param("answer")String answer);
 
 }
