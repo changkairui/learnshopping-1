@@ -1,6 +1,7 @@
 package com.neuedu.pojo;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Category {
     /**
@@ -199,5 +200,19 @@ public class Category {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+    //两个类相等这两个类的hashcode一定相等，如果两个类的hashcode相等两个类不一定相等
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return Objects.equals(id, category.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

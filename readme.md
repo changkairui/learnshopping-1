@@ -391,8 +391,17 @@
             int count = userService.register(userInfo);
                    return count;
                }
+ ### 用户模块
+ #### 项目中的问题
+     横向越权，纵向越权安全漏洞
+     横向越权：攻击者尝试访问与他拥有相同权限的用户的资源
+     纵向越权：低级别攻击者尝试访问高级别用户的资源
+     MD5明文加密
+     guava缓存的使用
+     高服用服务对象的设计思想及抽象封装
+     
 
- ### 封装返回前端的高复用对象
+ #### 封装返回前端的高服用对象
       class ServerResponse<T>{
         int status;//接口返回状态码
         T data;//封装了接口的返回数据
@@ -409,7 +418,7 @@
        
        @JsonIgnore
         ServerResponse转json的时候把success这个字段忽略掉
-        
+  ### 业务逻辑      
   #### 登录
        step1：参数的非空校验
          <dependency>
@@ -445,7 +454,12 @@
        step4：处理结果并返回  
    
    
- ### 注册
+ #### 注册
+    step1：参数的非空校验
+    step2：校验用户名是否存在
+    step3：校验邮箱是否存在
+    step4：调用dao接口插入用户信息
+    step5：返回数据
     时间直接用mysql里面的方法now(),前端在进行注册的时间直接用时间函数就好,不用再传时间了
     枚举：一个变量它的值时有限的，就可以定义为枚举，开关，姓名
     密码密文应该写到注册接口，因为注册接口是往数据库里写数据
@@ -456,7 +470,8 @@
        
        检查用户名是否有效
        在注册时，页面会立刻有个反馈做时时的提示防止有恶意的调用接口，用ajax 异步加载调用接口返回数据
- ### 找回密码接口
+ #### 忘记密码之修改密码
+
     step1：校验username--->查询找回密码问题
     step2：前端，提交问题答案
     step3：校验答案-->修改密码 
@@ -470,13 +485,71 @@
     @JsonSerialize:json是个键值对往页面传对象的时候是通过，扫描类下的get方法来取值的
            
     UUID生成的是一个唯一的随机生成一个字符串，每次生成都是唯一的
-    
-  ### 忘记密码
-      根据用户获取密保问题
-      回答问题
-      提交答案后修改密码
-  #####service层
-      step1:参数非空校验
-      step2;判断用户是否存在
-      step3：查询密保问题
+  #### 根据用户名查询密保问题
+      step1：参数非空校验
+      step2：校验username是否存在
+      step3：根据username查询密保问题
       step4：返回结果
+  
+  ##### 提交问题答案
+      step1：参数非空校验
+      step2：校验答案：根据username,question,answer查询，看看有没有这条记录
+      step3：服务端生成一个token保存并将token返回给客户端
+         String user_Token=UUID.randomUUID().toString();
+         UUID每次生成的字符串是唯一的，不会重复的
+         guava cache
+         TokenCache.put(username,user_Token);
+         缓存里用key或取，key要保证他的唯一性，key就是用户，key直接用value就可以了
+         这样就把token放到服务端的缓存里面了，同时要将token返回到客户端
+      step4：返回结果
+  ##### 修改密码
+      step1：参数的非空校验
+      step2：校验token
+      step3：更新密码
+      step4：返回结果
+  ### 登录状态下修改密码
+      step1：参数的非空校验
+      step2：校验旧密码是否正确,根据用户名和旧密码查询这个用户
+      step3：修改密码
+      step4：返回结果
+      在控制层中要先判断是否登录
+      
+  ### 类别模块    
+  #### 1：功能介绍
+       获取节点
+       增加节点
+       修改名称
+       获取分类
+       递归子节点
+   #### 2：学习目标
+        如何设计界封装无限层级的树状数据结构
+        递归算法的设计思想
+          递归一定要有一个结束条件，否则就成了一个死循环
+        如何处理复杂对象重排
+        重写hashcode和equals的注意事项  
+   #### 获取品类子节点（平级）
+        step1：非空校验
+        step2：根据categoryId查询类别
+        step3：查询子类别
+        step4：返回结果
+   #### 增加节点
+        step1：非空校验
+        step2：添加节点
+        step3：返回结果
+   #### 修改节点
+        step1：非空校验
+        step2：根据categoryId查询类别
+        step3：修改类别
+        step4：返回结果
+   #### 获取当前分类id及递归子节点categoryId
+       先定义一个递归的方法
+         先查找本节点
+             set里面的集合不可重复，通过类别id判断是不是重复，要重写类别对象的equals方法，在重写equals方法前先重写hashcode方法
+                 两个类相等这两个类的hashcode一定相等，如果两个类的hashcode相等两个类不一定相等
+         查找categoryId下的子节点（平级）
+             遍历这个集合拿到这个每个子节点
+             对集合的每个节点调用当前这个递归方法
+         递归的结束语句就是 categoryList==null&&categoryList.size()<=0
+       step1：参数的非空校验
+       step2：查询
+         

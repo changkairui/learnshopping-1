@@ -46,4 +46,12 @@ public interface IUserService {
      * @return
      */
     public ServerResponse reset_password(UserInfo userInfo, String passwordOld, String passwordNew);
+    /**
+     * 登录状态下修改个人信息
+     */
+    ServerResponse update_information(UserInfo user);
+    /**
+     * 通过用户id查询用户信息
+     */
+    UserInfo findUserInfoByUserid(Integer id);
 }

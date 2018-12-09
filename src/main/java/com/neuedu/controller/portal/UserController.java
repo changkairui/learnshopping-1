@@ -123,7 +123,7 @@ public class UserController {
     @RequestMapping(value = "logout.do")
     public ServerResponse logout(HttpSession session){
         session.removeAttribute(Const.CURRENTUSER);
-        return ServerResponse.createServerResponseBySucess();
+        return ServerResponse.createServerResponseBySucess("退出登录");
     }
     /**
      * 登录状态重置密码
@@ -136,6 +136,26 @@ public class UserController {
             UserInfo userInfo = (UserInfo)o;
             return iUserService.reset_password(userInfo,passwordOld,passwordNew);
 
+        }
+        return ServerResponse.createServerResponseByErrow(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());
+    }
+    /**
+     * 登录状态更新个人信息
+     */
+    @RequestMapping(value = "update_information.do")
+    public ServerResponse update_information(HttpSession session, UserInfo user){
+
+        Object o = session.getAttribute(Const.CURRENTUSER);
+        if (o!=null && o instanceof UserInfo){
+            UserInfo userInfo = (UserInfo)o;
+            user.setId(userInfo.getId());//可以通过userid来更新用户
+           ServerResponse serverResponse = iUserService.update_information(user);
+
+           if (serverResponse.isSuccess()){
+            //得到最新的用户,更新session中的用户信息
+            UserInfo userInfo1 =  iUserService.findUserInfoByUserid(userInfo.getId());
+            session.setAttribute(Const.CURRENTUSER,userInfo1);
+           }
         }
         return ServerResponse.createServerResponseByErrow(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());
     }

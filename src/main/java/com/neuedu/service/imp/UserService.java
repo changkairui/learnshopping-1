@@ -261,4 +261,25 @@ public class UserService implements IUserService {
         return ServerResponse.createServerResponseBySucess("密码修改成功");
 
     }
+
+    @Override
+    public ServerResponse update_information(UserInfo user) {
+        //step1:参数非空校验
+        if (user==null){
+            return ServerResponse.createServerResponseByErrow("参数不能为空");
+        }
+        //step2：更新用户信息
+        int result = userInfoMapper.updateUserBySelectActive(user);
+        if (result>0){
+            return ServerResponse.createServerResponseBySucess("修改成功");
+        }
+        //step3：返回结果
+        return ServerResponse.createServerResponseBySucess("个人信息修改失败");
+    }
+
+    @Override
+    public UserInfo findUserInfoByUserid(Integer id) {
+
+        return userInfoMapper.selectByPrimaryKey(id);
+    }
 }
