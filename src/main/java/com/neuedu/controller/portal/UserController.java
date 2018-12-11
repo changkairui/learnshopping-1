@@ -153,7 +153,7 @@ public class UserController {
 
            if (serverResponse.isSuccess()){
             //得到最新的用户,更新session中的用户信息
-            UserInfo userInfo1 =  iUserService.findUserInfoByUserid(userInfo.getId());
+            UserInfo userInfo1 =  iUserService.findUserInfoByUserid(user.getId());
             session.setAttribute(Const.CURRENTUSER,userInfo1);
            }
         }

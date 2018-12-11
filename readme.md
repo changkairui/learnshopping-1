@@ -516,14 +516,14 @@
       
   ### 类别模块    
   #### 1：功能介绍
-       获取节点
+       获取品类子节点（平级）
        增加节点
-       修改名称
-       获取分类
-       递归子节点
+       修改节点
+       获取当前分类id及递归子节点categoryId
    #### 2：学习目标
         如何设计界封装无限层级的树状数据结构
         递归算法的设计思想
+          自己调用自己
           递归一定要有一个结束条件，否则就成了一个死循环
         如何处理复杂对象重排
         重写hashcode和equals的注意事项  
@@ -552,4 +552,53 @@
          递归的结束语句就是 categoryList==null&&categoryList.size()<=0
        step1：参数的非空校验
        step2：查询
+   ### 商品模块
+   #### 前台功能
+        产品搜索（前台关键字搜索，对应后台是模糊查询；根据类别搜索产品，要把所有这个类别下的商品都要查询出来，这时就要用到递归查询子类别，查询这个类别下的产品）
+        动态排序（按照价格从高往低或从低往高显示）把产品搜索和动态排序放到一个接口
+        商品详情（在商品详情页面可以加入购物车）
+   #### 后台功能
+        商品列表（查询在售和下架）
+        商品搜索
+        图片上传（SpringMVC）
+        富文本上传（图文上传，前台会有个富文本编译器）
+        商品详情
+        商品上下架
+        增加商品
+        更新商品
+   #### 学习目标
+        FTP服务的对接(图片上传，图片通过FTP服务器保存到单独的图片服务器)
+        SpringMVC文件上传
+        流读取properties配置文件（读取配置文件的一个封装类）
+        抽象POJO（数据库对应一个实体类）、BO（business object业务逻辑层的实体类）、VO（view object视图层的实体类）对象之间的转换关系及解决思路
+            如果数据库的实体类满足不了往前端视图层显示的要求，会在视图层创建VO对象，会将POJO对象转成VO对象
+        joda-time快速入门（时间处理的工具包）
+        静态块
+        Mybatis-PageHelper高效准确的分页及动态排序
+        Mybatis对List遍历的实现方法
+        Mybatis对where语句动态拼接
+        POJO、BO、business、object、VO、view、object
+        POJO、VO
+   #### 新增OR更新产品
+   ##### controller层
+         step1：判断是否登录
+         step2：判断用户权限是否为管理员
+         step3：上传数据
+   ##### service层
+         step1：参数非空校验
+         step2：设置商品主图 sub_images --> 1.jpg,2.jpg,3.png 
+                           取出第一张，它是一个字符串，
+         step3：商品save or update
+         step4：返回结果 
+         
+         
+   #### 配置虚拟路径
+      Tomcat文件夹目录下的conf --> server.xml --> 
+                       <Context path="/uploadpic" docBase="D:\面试强化\ftpfile" reloadable="true" />
+                       path="/uploadpic" 虚拟路径
+                       docBase="D:\面试强化\ftpfile" 存放图片的地址
+                       reloadable="true"  自动加载
+                              
+           
+     
          

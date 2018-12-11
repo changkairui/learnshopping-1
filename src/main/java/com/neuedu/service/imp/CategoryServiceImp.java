@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class CategoryService implements ICategoryService {
+public class CategoryServiceImp implements ICategoryService {
     @Autowired
     CategoryMapper categoryMapper;
 

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Service
-public class UserService implements IUserService {
+public class UserServiceImp implements IUserService {
 
    @Autowired
     UserInfoMapper userInfoMapper;
@@ -279,7 +279,6 @@ public class UserService implements IUserService {
 
     @Override
     public UserInfo findUserInfoByUserid(Integer id) {
-
         return userInfoMapper.selectByPrimaryKey(id);
     }
 }

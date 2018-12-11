@@ -75,9 +75,7 @@
       <if test="answer!=null">
         answer = #{answer,jdbcType=VARCHAR},
       </if>
-      <if test="update_time!=null">
         update_time = now()
-      </if>
 
     </set>
 

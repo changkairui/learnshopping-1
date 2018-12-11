@@ -3,7 +3,8 @@ package com.neuedu.controller.manage;
 import com.neuedu.common.Const;
 import com.neuedu.common.ServerResponse;
 import com.neuedu.pojo.UserInfo;
-import com.neuedu.service.imp.CategoryService;
+import com.neuedu.service.ICategoryService;
+import com.neuedu.service.imp.CategoryServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,7 @@ public class CategoryManagerController {
 
 
     @Autowired
-    CategoryService categoryService;
+    ICategoryService categoryService;
     /**
      * 获取品类子节点（平级）
      */
