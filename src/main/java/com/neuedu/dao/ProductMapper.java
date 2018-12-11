@@ -61,6 +61,6 @@ public interface ProductMapper {
      *
      * 前台-搜索商品
      */
-    List<Product>searchProduct(@Param("integerset") Set<Integer> integerset,
+    List<Product>searchProduct(@Param("integerset") Set<Integer> integerSet,
                                @Param("keyword") String keyword);
 }

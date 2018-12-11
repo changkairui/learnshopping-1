@@ -133,9 +133,9 @@
     create_time, update_time, detail
     from product
     <where>
-      <if test="integerSet!=null and integerSet.size>0">
+      <if test="integerset!=null and integerset.size>0">
         and category_id IN
-        <foreach collection="integerSet" item="categoryId" open="(" close=")" separator=",">
+        <foreach collection="integerset" item="categoryId" open="(" close=")" separator=",">
           #{categoryId}
         </foreach>
 

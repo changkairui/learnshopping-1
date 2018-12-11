@@ -156,21 +156,21 @@ public class ProductServiceImp implements IProductService {
         //分页要写到list之后aop就不起作用了
         //查询商品数据
         List<Product> productList = productMapper.selectAll();
-        List<ProductDetailVO> productDetailVOList = Lists.newArrayList();
+        List<ProductListVO> productListVOList = Lists.newArrayList();
         if (productList!=null&&productList.size()>0){
             for (Product pro:productList) {
-                ProductDetailVO productDetailVO = assembleProductListVO(pro);
-                productDetailVOList.add(productDetailVO);
+                ProductListVO productListVO = assembleProductListVO(pro);
+                productListVOList.add(productListVO);
             }
         }
-        PageInfo pageInfo = new PageInfo(productDetailVOList);
+        PageInfo pageInfo = new PageInfo(productListVOList);
 
         return ServerResponse.createServerResponseBySucess(null,pageInfo);
     }
-    private ProductDetailVO assembleProductListVO(Product product){
-        ProductDetailVO productDetailVO = new ProductDetailVO();
+    private ProductListVO assembleProductListVO(Product product){
+        ProductListVO productDetailVO = new ProductListVO();
         productDetailVO.setId(product.getId());
-        productDetailVO.setParentCategoryId(product.getCategoryId());
+        productDetailVO.setCategoryId(product.getCategoryId());
         productDetailVO.setMainImage(product.getMainImage());
         productDetailVO.setName(product.getName());
         productDetailVO.setPrice(product.getPrice());
@@ -189,15 +189,15 @@ public class ProductServiceImp implements IProductService {
             productName="%"+productName+"%";
         }
         List<Product>productList = productMapper.findProductIdByProductName(productId,productName);
-        List<ProductDetailVO>productDetailVOList=Lists.newArrayList();
+        List<ProductListVO>productListVOList=Lists.newArrayList();
         if (productList!=null&&productList.size()>0){
             for (Product pro:productList) {
-                ProductDetailVO productDetailVO = assembleProductListVO(pro);
-                productDetailVOList.add(productDetailVO);
+                ProductListVO productListVO = assembleProductListVO(pro);
+                productListVOList.add(productListVO);
             }
         }
 
-        PageInfo pageInfo = new PageInfo(productDetailVOList);
+        PageInfo pageInfo = new PageInfo(productListVOList);
         return ServerResponse.createServerResponseBySucess(null,pageInfo);
     }
     /**
@@ -221,7 +221,7 @@ public class ProductServiceImp implements IProductService {
         }
 
         //step4:获取productDetailVO
-        ProductDetailVO productDetailVO = assembleProductListVO(product);
+        ProductDetailVO productDetailVO = assembleProductDetailVO(product);
         //step5:返回结果
 
         return ServerResponse.createServerResponseBySucess(null,productDetailVO);
@@ -242,7 +242,7 @@ public class ProductServiceImp implements IProductService {
             //获取图片扩展名
         String exName = originalFilename.substring(originalFilename.lastIndexOf(".")); //.jpg
             //为图片生成新的唯一的名字
-        String newFileName = UUID.randomUUID().toString();
+        String newFileName = UUID.randomUUID().toString()+exName;
 
         File pathFile = new File(path);
         if (!pathFile.exists()){//判断这个路径是否存在
@@ -287,10 +287,10 @@ public class ProductServiceImp implements IProductService {
         if (categoryId!=null){
             Category category = categoryMapper.selectByPrimaryKey(categoryId);
             if (category==null&&StringUtils.isBlank(keyword)){
-                //说明没有商品数据，此时分页也要有输出，但是没有数据
+                //说明没有商品数据，此时分页也要有输出，但是list里面没有数据
                 PageHelper.startPage(pageNum,pageSize);
-                List<ProductDetailVO>productDetailVOList = Lists.newArrayList();
-                PageInfo pageInfo = new PageInfo(productDetailVOList);
+                List<ProductListVO>productListVOList = Lists.newArrayList();
+                PageInfo pageInfo = new PageInfo(productListVOList);
                 return ServerResponse.createServerResponseBySucess(null,pageInfo);
             }
             //不为空就可以查询这个id下的后代子类，用递归
@@ -302,7 +302,7 @@ public class ProductServiceImp implements IProductService {
         }
         //step3：keyword
         if (!StringUtils.isBlank(keyword)){
-            keyword = "%"+keyword+"%";
+            keyword = "%"+keyword+"%";//模糊查询
         }
         if (orderBy.equals("")){
             PageHelper.startPage(pageNum,pageSize);
