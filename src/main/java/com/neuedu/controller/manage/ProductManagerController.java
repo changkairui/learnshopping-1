@@ -99,8 +99,8 @@ public class ProductManagerController {
      */
     @RequestMapping(value = "search.do")
     public ServerResponse search(HttpSession session,
-                                 @RequestParam(value = "pageNum",required = false)Integer productId,
-                                 @RequestParam(value = "pageSize",required = false)String productName,
+                                 @RequestParam(value = "productId",required = false)Integer productId,
+                                 @RequestParam(value = "productName",required = false)String productName,
                                  @RequestParam(value = "pageNum",required = false,defaultValue = "1")Integer pageNum,
                                  @RequestParam(value = "pageSize",required = false,defaultValue = "10")Integer pageSize){
         UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENTUSER);

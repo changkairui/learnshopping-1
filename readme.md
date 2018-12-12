@@ -598,6 +598,8 @@
                        path="/uploadpic" 虚拟路径
                        docBase="D:\面试强化\ftpfile" 存放图片的地址
                        reloadable="true"  自动加载
+                       
+      bigDecimall要用他的字符串构造方法，否则也不准确
                               
            
      
