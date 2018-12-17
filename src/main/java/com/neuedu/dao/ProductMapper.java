@@ -46,7 +46,6 @@ public interface ProductMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Product record);
-
     /**
      * 产品列表
      * @param product

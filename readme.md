@@ -600,6 +600,18 @@
                        reloadable="true"  自动加载
                        
       bigDecimall要用他的字符串构造方法，否则也不准确
+   
+   
+   ### 购物车添加
+       step1：参数非空校验
+       step2：根据productId和userId查询购物信息，看是否存在，如果查到信息，说明已经添加到购物车了，只需要更新数量
+       
+   ### 查询购物车产品的数量
+       如果不存在这个用户，name购物车会返回null,此时如果返回int类型就不对，应该用Integer类型，如果非要返回int,就用mysql里边的一个函数ifnull
+    
+   ### 收货地址
+       插入地址，返回的是受影响的行数并不是返回的id，如果要返回id，要是用主键useGenerateKeys=true,生成的主键的这个值赋给shipping里面的id，keyProperties="id"
+       
                               
            
      

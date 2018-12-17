@@ -45,7 +45,6 @@ public interface UserInfoMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(UserInfo record);
-
     /**
      * 校验用户名是否存在
      */
@@ -61,7 +60,7 @@ public interface UserInfoMapper {
      * @param password
      * @return
      */
-   UserInfo selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
+    UserInfo selectUserByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
     /**
      * 根据用户名查找密保问题
      */

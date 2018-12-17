@@ -36,4 +36,32 @@ public enum ResponseCode {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+    public enum CartCheckedEnum{
+        PRODUCT_CHECKED(1,"已勾选"),
+        PRODUCT_UNCHECKED(0,"未勾选"),
+
+        ;
+        private int code;
+        private  String desc;
+        CartCheckedEnum(int code,String desc){
+            this.code=code;
+            this.desc=desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+    }
 }
