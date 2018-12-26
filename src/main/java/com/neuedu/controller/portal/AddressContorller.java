@@ -62,7 +62,7 @@ public class AddressContorller {
             return ServerResponse.createServerResponseByErrow(ResponseCode.USER_NOT_LOGIN.getStatus(),ResponseCode.USER_NOT_LOGIN.getMsg());
         }
 
-        shipping.setUserId(userInfo.getId());
+        shipping.setUserId(userInfo.getId());//??????????
         return iAddressService.update(shipping);
 
     }

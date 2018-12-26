@@ -29,7 +29,7 @@
  ##### 可以将多个文件多次提交到暂存区，在暂存区通过git commit（清空暂存区）一次性提交到本地仓库,然后再提交到远程仓库GitHub
  ##### git init:先在本地初始化一个仓库
  ##### git add README.md：将我的工作区里的文件提交到暂存区
- ##### git commit -m "本次提交的一个描述" :将暂存区的内容提交到本地仓库
+ ##### git commit -m "本次提交的一git个描述" :将暂存区的内容提交到本地仓库
  ##### git remote add origin git@github.com:lll865457981/learnshopping.git:将本地仓库和远程仓库做一个关联
  ##### git push -u origin master：将本地仓库里的内容提交到远程仓库
  
@@ -611,6 +611,14 @@
     
    ### 收货地址
        插入地址，返回的是受影响的行数并不是返回的id，如果要返回id，要是用主键useGenerateKeys=true,生成的主键的这个值赋给shipping里面的id，keyProperties="id"
+   
+   ### 迭代开发-线上部署
+       1：在阿里云服务器上建库、建表
+       2：修改代码中数据库的参数
+       3：项目打成war包
+       4：将war包上传到阿里云服务器的Tomcat/webapps
+       5：访问测试
+         
        
                               
            

@@ -240,6 +240,35 @@
     <artifactId>jedis</artifactId>
     <version>2.8.0</version>
   </dependency>
+    <!--支付-->
+    <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.10</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-configuration/commons-configuration -->
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.10</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+
+
+
+
 
   </dependencies>
 
@@ -254,6 +283,19 @@
     <verbose>true</verbose>
     <overwrite>true</overwrite>
   </configuration>
+  </plugin>
+      <!--把alipay几个jar包打进我这个项目里-->
+  <plugin>
+    <groupId>org.apache.maven.plugin</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+      <source>1.8</source>
+      <target>1.8</target>
+      <encoding>UTF-8</encoding>
+      <compilerArguments>
+        <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
+      </compilerArguments>
+    </configuration>
   </plugin>
 
   </plugins>

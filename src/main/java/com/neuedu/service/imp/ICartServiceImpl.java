@@ -104,12 +104,13 @@ public class ICartServiceImpl implements ICartService {
                     cartProductVO.setQuantity(limitProductCount);
                     //getQuantity  Integer 类型转化Double类型用Double.valueOf  总价=单价*数量
 
-                    if (cartProductVO.getProductChecked()==ResponseCode.CartCheckedEnum.PRODUCT_CHECKED.getCode()) {
+
                         cartProductVO.setProductTotalPrice(BigDecimalUtils.mul(product.getPrice().doubleValue(), Double.valueOf(cartProductVO.getQuantity())));
 
-                    }
-                    }
+
+
                     carttotalprice = BigDecimalUtils.add(carttotalprice.doubleValue(), cartProductVO.getProductTotalPrice().doubleValue());
+                }
                     cartProductVOList.add(cartProductVO);
                 }
             }
